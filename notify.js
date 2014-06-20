@@ -95,8 +95,10 @@
 
     // asks the user for permission to display notifications.  Then calls the callback functions is supplied.
     Notify.requestPermission = function (onPermissionGrantedCallback, onPermissionDeniedCallback) {
+        var failed = true;
         if (Notify.isSupported()) {
             w.Notification.requestPermission(function (perm) {
+                failed = false;
                 switch (perm) {
                     case 'granted':
                         if (typeof onPermissionGrantedCallback === 'function') {
@@ -110,6 +112,9 @@
                         break;
                 }
             });
+            if(failed === true) {
+                throw new Error('Notify(): permission request failed.');
+            }
         }
     };
 
